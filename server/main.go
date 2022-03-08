@@ -20,6 +20,7 @@ func main() {
 
 	todos := []Todo{}
 
+	// status check
 	app.Get("/healthcheck", func(c *fiber.Ctx) error {
 		return c.SendString("ok")
 	})
@@ -38,6 +39,7 @@ func main() {
 		return c.JSON(todos)
 
 	})
+
 	// update todo
 	app.Patch("/api/todos/:id/done", func(c *fiber.Ctx) error {
 		id, err := c.ParamsInt("id")
@@ -54,6 +56,11 @@ func main() {
 		}
 		return c.JSON(todos)
 
+	})
+
+	// get all todos
+	app.Get("/api/todos", func(c *fiber.Ctx) error {
+		return c.JSON(todos)
 	})
 
 	log.Fatal(app.Listen(":4000"))
