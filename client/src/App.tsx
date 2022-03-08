@@ -9,11 +9,12 @@ export const ENDPOINT = 'http://localhost:4000'
 
 
 function App() {
+  const {data,mutate} = useSWR('api/todos', fetcher)
 
 
   return (
     <Box>
-      Test
+      {JSON.stringify(data)}
     </Box>
     
   )

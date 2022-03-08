@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type Todo struct {
@@ -15,23 +16,30 @@ type Todo struct {
 }
 
 func main() {
-	fmt.Print("hello")
+	fmt.Print("Hello world")
+
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:3000",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	todos := []Todo{}
 
 	// status check
 	app.Get("/healthcheck", func(c *fiber.Ctx) error {
-		return c.SendString("ok")
+		return c.SendString("OK")
 	})
 
 	// add todo
 	app.Post("/api/todos", func(c *fiber.Ctx) error {
 		todo := &Todo{}
 
-		if err := c.BodyParser((todo)); err != nil {
+		if err := c.BodyParser(todo); err != nil {
 			return err
 		}
+
 		todo.ID = len(todos) + 1
 
 		todos = append(todos, *todo)
@@ -54,14 +62,15 @@ func main() {
 				break
 			}
 		}
-		return c.JSON(todos)
 
+		return c.JSON(todos)
 	})
 
-	// get all todos
+	// get todos
 	app.Get("/api/todos", func(c *fiber.Ctx) error {
 		return c.JSON(todos)
 	})
 
 	log.Fatal(app.Listen(":4000"))
+
 }
