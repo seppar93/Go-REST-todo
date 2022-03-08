@@ -25,8 +25,9 @@ function AddTodo({mutate}: {mutate:KeyedMutator<Todo[]>}) {
     mutate(updated)
     form.reset()
     setOpen(false)
-
   }
+
+  
   return (
     <>
       <Modal opened={open} onClose={() => setOpen(false)} title='create todo'>
